@@ -63,6 +63,7 @@ class _HomepageState extends State<Homepage> {
             if (task.repeat == 'Daily') {
               DateTime date = DateFormat.jm().parse(task.startTime.toString());
               var myTime = DateFormat("HH:mm").format(date);
+              print(myTime);
               notifyHelper.scheduledNotification(
                   int.parse(myTime.toString().split(":")[0]),
                   int.parse(myTime.toString().split(":")[1]),
@@ -89,16 +90,17 @@ class _HomepageState extends State<Homepage> {
                   position: index,
                   child: SlideAnimation(
                     child: FadeInAnimation(
-                        child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _showBottomSheet(context, task);
-                          },
-                          child: TaskTile(task),
-                        )
-                      ],
-                    )),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _showBottomSheet(context, task);
+                            },
+                            child: TaskTile(task),
+                          )
+                        ],
+                      ),
+                    ),
                   ));
             } else {
               return Container();

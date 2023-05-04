@@ -49,7 +49,7 @@ class DBHelper {
 
   static update(int id) async{
     return await _db!.rawUpdate('''
-      UPADATE tasks
+      UPDATE tasks
       SET isCompleted = ?
       WHERE id =?
   ''', [1, id]);

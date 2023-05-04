@@ -3,8 +3,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:get/get.dart';
 import 'package:project/models/task.dart';
+import 'package:project/ui/notified_page.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:project/services/notification_services.dart';
 
 class NotifyHelper {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -30,7 +32,7 @@ class NotifyHelper {
         onSelectNotification: selectNotification);
   }
 
-  displayNotification({required String title, required String body}) async {
+  Future<void>displayNotification({required String title, required String body}) async {
     print("doing test");
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         'your channel id', 'your channel name',
@@ -53,9 +55,9 @@ class NotifyHelper {
 
   scheduledNotification(int hour, int minutes, Task task) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        0,
-        'Scheduled Title',
-        'Theme changes 5 seconds ago',
+        task.id!.toInt(),
+        task.title,
+        task.note,
         _convertTime(hour, minutes),
         //tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
         const NotificationDetails(
@@ -63,9 +65,9 @@ class NotifyHelper {
                 'your channel id', 'your channel name')),
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents:DateTimeComponents.time
-      );
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time,
+        payload: "${task.title}|" + "${task.note}|");
   }
 
   tz.TZDateTime _convertTime(int hour, int minutes) {
@@ -101,9 +103,7 @@ class NotifyHelper {
     } else {
       print("Notification Done");
     }
-    Get.to(() => Container(
-          color: Colors.white,
-        ));
+    Get.to(() => NotifiedPage(label:payload));
   }
 
   Future onDidReceiveLocalNotification(

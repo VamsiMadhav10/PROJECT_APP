@@ -77,7 +77,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 children: [
                   Expanded(
                     child: MyInputField(
-                      title: "Start Date",
+                      title: "Start Time",
                       hint: _startTime,
                       widget: IconButton(
                         icon: Icon(
@@ -94,7 +94,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   Expanded(
                     child: MyInputField(
                       hint: _endTime,
-                      title: "End Date",
+                      title: "End Time",
                       widget: IconButton(
                         icon: Icon(
                           Icons.access_time_filled_rounded,
