@@ -6,7 +6,6 @@ import 'package:project/models/task.dart';
 import 'package:project/ui/notified_page.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:project/services/notification_services.dart';
 
 class NotifyHelper {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -14,6 +13,7 @@ class NotifyHelper {
 
   initializeNotification() async {
     _configureLocalTimezone();
+
     final IOSInitializationSettings initializationSettingsIOS =
         IOSInitializationSettings(
             requestSoundPermission: false,
@@ -21,7 +21,7 @@ class NotifyHelper {
             requestAlertPermission: false,
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
-    final AndroidInitializationSettings initializationSettingsAndroid =
+    final initializationSettingsAndroid =
         AndroidInitializationSettings("ic_launcher");
     final InitializationSettings initializationSettings =
         InitializationSettings(
@@ -32,11 +32,14 @@ class NotifyHelper {
         onSelectNotification: selectNotification);
   }
 
-  Future<void>displayNotification({required String title, required String body}) async {
+  Future<void> displayNotification(
+      {required String title, required String body}) async {
     print("doing test");
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         'your channel id', 'your channel name',
-        importance: Importance.max, priority: Priority.high);
+        importance: Importance.max,
+        priority: Priority.high,
+        );
 
     var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
 
@@ -62,7 +65,7 @@ class NotifyHelper {
         //tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
         const NotificationDetails(
             android: AndroidNotificationDetails(
-                'your channel id', 'your channel name')),
+                'your channel id', 'your channel name',channelDescription: 'your channel description')),
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
@@ -103,7 +106,7 @@ class NotifyHelper {
     } else {
       print("Notification Done");
     }
-    Get.to(() => NotifiedPage(label:payload));
+    Get.to(() => NotifiedPage(label: payload));
   }
 
   Future onDidReceiveLocalNotification(
